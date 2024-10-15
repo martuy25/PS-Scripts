@@ -19,7 +19,7 @@ $FailedLogons | Export-Csv -NoTypeInformation -Path $CsvFile
 Write-Host "Failed logons report exported to $CsvFile"
 
 # Threshold for failed sign on events
-$Threshold = 2
+$Threshold = 5
 $SuspiciousAttempts = $FailedLogons | Group-Object User | Where-Object {$_.Count -ge $Threshold}
 
 if ($SuspiciousAttempts.Count -gt 0) {
@@ -88,7 +88,7 @@ if ($SuspiciousAttempts.Count -gt 0) {
     }
     Write-EventLog -LogName Application -Source $logSource -EntryType Warning -EventId 3001 -Message $message
     
-    # Optionally, write to a log file
+    # write to a log file
     $logFile = "C:\Users\mrkdwn\Documents\log.txt"
     $logTimestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $logContent = "${logTimestamp}: ${message}"
